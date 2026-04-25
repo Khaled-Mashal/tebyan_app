@@ -17,21 +17,39 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Language/Version**: [Dart/Flutter version or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [MUST include quran_library: 4.0.1 for Quran features; other latest compatible stable packages or NEEDS CLARIFICATION]  
 **Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Testing**: [flutter test, widget tests, integration/manual checks or NEEDS CLARIFICATION]  
+**Target Platform**: [Android/iOS/Web/Desktop support for this feature or NEEDS CLARIFICATION]
+**Project Type**: Flutter interactive Quran application  
+**Performance Goals**: [reading/navigation/playback responsiveness goals or NEEDS CLARIFICATION]  
+**Constraints**: [quran_library-first, offline/audio/search/bookmark constraints or NEEDS CLARIFICATION]  
+**Scale/Scope**: [Quran workflows, screens, locales, playback modes or NEEDS CLARIFICATION]
+
+## Research Evidence
+
+- **quran_library**: [Context7 query/result for quran_library 4.0.1 usage, initialization, and relevant APIs]
+- **Flutter architecture**: [Context7 query/result for Flutter architecture or state-management guidance]
+- **Additional dependencies**: [Context7 query/result for each package; if unresolved, cite official docs/pub.dev/upstream fallback]
+- **Version decisions**: [latest compatible stable versions chosen, pinned versions, and compatibility rationale]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Quran Library Boundary**: Quran rendering, metadata, navigation, audio, tafsir,
+  translations, search, and bookmarks use `quran_library: 4.0.1`; no duplicate
+  Quran content or parallel Quran domain engine is introduced.
+- **Clean Flutter Architecture**: Plan identifies presentation, state/application,
+  quran_library adaptor, persistence, and test boundaries with real paths.
+- **Context7-First Research**: Context7 evidence is recorded for quran_library,
+  Flutter architecture, and each changed dependency; official fallback sources
+  are cited only when Context7 cannot answer.
+- **Testable Interactive Experience**: Plan defines state, adaptor, widget, and
+  manual verification coverage for critical reading/navigation/playback flows.
+- **Professional Quality Gates**: Plan lists commands for formatting, static
+  analysis, tests, quickstart/manual verification, and any justified exceptions.
 
 ## Project Structure
 
@@ -56,17 +74,20 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+# Flutter app structure (adjust with real feature paths)
+lib/
+├── features/
+│   └── [feature]/
+│       ├── presentation/
+│       ├── application/
+│       ├── domain/
+│       └── infrastructure/
+├── shared/
+└── main.dart
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+test/
+├── features/
+└── shared/
 
 # [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
 backend/

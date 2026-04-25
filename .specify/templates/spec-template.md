@@ -95,6 +95,19 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Quran Library Requirements *(mandatory for Quran features)*
+
+- **QL-001**: Feature MUST identify which `quran_library: 4.0.1` capabilities it uses
+  [display, navigation, audio, tafsir, translations, bookmarks, search, or other].
+- **QL-002**: Feature MUST NOT require custom Quran text, custom mushaf rendering,
+  independent Quran metadata, or duplicated Quran search/audio/bookmark engines.
+- **QL-003**: Feature MUST define platform scope for Android, iOS, web, desktop,
+  and any excluded platform behavior.
+- **QL-004**: Feature MUST describe how Quran text integrity is preserved when
+  displaying, searching, highlighting, translating, or transforming UI state.
+- **QL-005**: Feature MUST identify any quran_library limitation that requires
+  custom code and mark it for planning research and approval.
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
@@ -126,3 +139,10 @@
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+
+## Research Expectations
+
+- Context7 MUST be used during planning for quran_library, Flutter architecture,
+  and every added or changed dependency.
+- If Context7 cannot resolve a required package, version, or API, the plan MUST
+  cite the official documentation, pub.dev, or upstream repository used instead.

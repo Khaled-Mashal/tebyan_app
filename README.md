@@ -1,17 +1,26 @@
-# tebyan_app
+# Tebyan App
 
-A new Flutter project.
+Tebyan App is an interactive Flutter Quran application governed by the project
+constitution in `.specify/memory/constitution.md`.
 
-## Getting Started
+## Architecture Rules
 
-This project is a starting point for a Flutter application.
+- Quran-specific rendering, navigation, metadata, audio, tafsir, translations,
+  search, and bookmarks rely on `quran_library: 4.0.1`.
+- Feature code is organized with clear presentation, state/application,
+  domain-interface, infrastructure/adaptor, and test boundaries.
+- Dependency and API decisions start with Context7 research. If Context7 cannot
+  answer, use official documentation, pub.dev, or the upstream repository.
+- New user-visible Quran behavior requires tests for state logic, quran_library
+  adaptors, and critical widget flows, plus manual verification where automated
+  tests cannot cover a platform behavior.
 
-A few resources to get you started if this is your first Flutter project:
+## Development Checks
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Use the standard Flutter checks before treating a change as complete:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```powershell
+dart format .
+flutter analyze
+flutter test
+```
