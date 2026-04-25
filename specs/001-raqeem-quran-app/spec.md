@@ -90,11 +90,11 @@ As a khatma user, I want to create a khatma with a date range, Quran range, remi
 
 **Why this priority**: The khatma planner is a defining feature of Raqeem and differentiates it from a basic Quran reader.
 
-**Independent Test**: A user can create a khatma, receive daily wird ranges, complete today's wird, see progress update, and handle missed or edited days predictably.
+**Independent Test**: A user can create a khatma using either an end date or a number of days, receive daily wird ranges, complete today's wird, see progress update, and handle missed or edited days predictably.
 
 **Acceptance Scenarios**:
 
-1. **Given** the user enters a valid khatma range and schedule, **When** they create the khatma, **Then** the app generates daily wird entries covering the selected Quran range.
+1. **Given** the user enters a valid khatma range and schedule using either an end date or a number of days, **When** they create the khatma, **Then** the app derives the final schedule date consistently and generates daily wird entries covering the selected Quran range.
 2. **Given** a daily wird is in progress, **When** the user marks it complete, **Then** the daily and overall khatma progress update immediately.
 3. **Given** the user changes an active khatma, **When** there are completed days, **Then** completed days remain unchanged unless the user explicitly confirms recalculation.
 4. **Given** the user misses a day, **When** they review the missed wird, **Then** they can carry it forward, redistribute the remaining wird, or keep it marked as missed.
@@ -108,7 +108,7 @@ As a Raqeem user, I want to adjust reading, audio, khatma, language, and visual 
 
 **Why this priority**: Personalization improves long-term usability but depends on the core reading and khatma flows.
 
-**Independent Test**: A user can change language, theme, reading display, audio default, reminder defaults, and accessibility-related preferences, then close and reopen the app with those choices preserved.
+**Independent Test**: A user can change language, theme, reading display, audio default, reminder defaults, and accessibility-related preferences, search across available Quran and app-owned sources, then close and reopen the app with those choices preserved.
 
 **Acceptance Scenarios**:
 
@@ -116,12 +116,14 @@ As a Raqeem user, I want to adjust reading, audio, khatma, language, and visual 
 2. **Given** the user changes language, **When** they navigate through primary screens, **Then** labels and controls appear in the selected language where supported.
 3. **Given** the user changes default reminder settings, **When** they create a new khatma, **Then** the new khatma starts with those defaults.
 4. **Given** the user increases supported text size settings, **When** they use primary MVP screens, **Then** Quran reading text, labels, and controls remain readable without clipping.
+5. **Given** the user opens search, **When** they search across surah names, available ayah content, bookmarks, notes, and available tafsir content, **Then** results are grouped by source, no-result states preserve the query, and opening a result routes to the correct Quran or app-owned location.
 
 ### Edge Cases
 
 - First launch without saved preferences opens onboarding and does not expose incomplete setup states.
 - Closing the app during reading, playback, khatma creation, or bookmark editing preserves the last committed user data.
 - A khatma end position before its start position is rejected with a clear correction message.
+- A khatma created by number of days derives the same final schedule date used for reminders, previews, and persisted daily wird rows.
 - A khatma with zero active reading days is rejected before creation.
 - A very large daily wird prompts a gentle warning while still allowing the user to continue if the schedule is valid.
 - Editing an active khatma never silently changes completed days.
@@ -196,18 +198,20 @@ As a Raqeem user, I want to adjust reading, audio, khatma, language, and visual 
 
 ### Measurable Outcomes
 
+Usability percentage criteria are validated with a release-readiness usability pass of at least 10 representative participants or internal testers. Each criterion records tester count, device/OS, locale, task completion, completion time where specified, and whether assistance was required in the manual verification notes.
+
 - **SC-001**: A returning user can open the app and continue from the last reading position in 10 seconds or less after launch on a typical supported phone.
-- **SC-002**: 95% of tested users can navigate from the home dashboard to a specific surah or page without assistance.
-- **SC-003**: 95% of tested users can select an ayah and complete at least one action from the ayah menu within 20 seconds.
-- **SC-004**: 90% of tested users can create a valid khatma plan and understand today's wird without external instructions.
+- **SC-002**: 95% of tested users in the usability validation pass can navigate from the home dashboard to a specific surah or page without assistance.
+- **SC-003**: 95% of tested users in the usability validation pass can select an ayah and complete at least one action from the ayah menu within 20 seconds.
+- **SC-004**: 90% of tested users in the usability validation pass can create a valid khatma plan and understand today's wird without external instructions.
 - **SC-005**: Daily wird generation covers 100% of the selected khatma range with no duplicate or missing assigned reading pages, and preserves exact ayah boundaries where the selected range begins or ends inside a page.
 - **SC-006**: Completing a daily wird updates visible daily and overall khatma progress immediately in all tested scenarios.
-- **SC-007**: 95% of tested users can add a bookmark and reopen the saved Quran position later.
+- **SC-007**: 95% of tested users in the usability validation pass can add a bookmark and reopen the saved Quran position later.
 - **SC-008**: A user can share an ayah as text or image in 30 seconds or less after selecting the ayah.
 - **SC-009**: Core Quran reading, last reading, bookmarks, settings, and khatma progress remain usable without internet access, while uncached audio clearly communicates connectivity requirements.
 - **SC-010**: Arabic screens maintain correct RTL layout and readable Quran-focused presentation across all MVP flows.
 - **SC-011**: Primary controls meet the 44px minimum touch target and primary labels do not clip at all supported text sizes in MVP screen review.
-- **SC-012**: The reading interface maintains comfortable readability in light and night modes during stakeholder review.
+- **SC-012**: The reading interface passes the release-readiness design review checklist for comfortable readability in light and night modes.
 - **SC-013**: No MVP screen remains in a generic starter or placeholder design state at release readiness review.
 
 ## Assumptions

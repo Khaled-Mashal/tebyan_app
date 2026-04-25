@@ -1,30 +1,67 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:tebyan_app/main.dart';
+import 'package:provider/provider.dart';
+import 'package:tebyan_app/app/app.dart';
+import 'package:tebyan_app/features/home/domain/last_reading_entry.dart';
+import 'package:tebyan_app/features/home/infrastructure/last_reading_repository.dart';
+import 'package:tebyan_app/features/khatma/application/active_khatma_summary.dart';
+import 'package:tebyan_app/features/settings/domain/user_preferences.dart';
+import 'package:tebyan_app/features/settings/infrastructure/preferences_repository.dart';
+import 'package:tebyan_app/shared/errors/result.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Raqeem splash shows app name before routing', (tester) async {
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          Provider<PreferencesRepository>.value(
+            value: _StubPreferencesRepository(),
+          ),
+          Provider<LastReadingRepository>.value(
+            value: _StubLastReadingRepository(),
+          ),
+          Provider<ActiveKhatmaReader>.value(
+            value: const NoopActiveKhatmaReader(),
+          ),
+        ],
+        child: const RaqeemApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('رقيم'), findsOneWidget);
   });
+}
+
+class _StubPreferencesRepository implements PreferencesRepository {
+  @override
+  Future<Result<UserPreferences?>> loadUserPreferences() async {
+    return Success<UserPreferences?>(
+      UserPreferences.defaults(
+        now: DateTime.utc(2026, 4, 25),
+      ).copyWith(onboardingCompleted: true),
+    );
+  }
+
+  @override
+  Future<Result<void>> saveUserPreferences(UserPreferences preferences) async {
+    return const Success<void>(null);
+  }
+}
+
+class _StubLastReadingRepository implements LastReadingRepository {
+  @override
+  Future<Result<void>> saveEntry(LastReadingEntry entry) async {
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<List<LastReadingEntry>>> recentEntries() async {
+    return const Success<List<LastReadingEntry>>(<LastReadingEntry>[]);
+  }
+
+  @override
+  Future<Result<LastReadingEntry?>> latestEntry() async {
+    return const Success<LastReadingEntry?>(null);
+  }
 }
