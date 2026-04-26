@@ -136,6 +136,114 @@ flutter build apk --debug
 - [ ] When dashboard data fails to load, a calm error view appears with a retry button.
 - [ ] Tapping retry reloads the dashboard without losing the app context.
 
+### US2: Read and Navigate the Mushaf
+
+#### Reader Launch
+- [ ] Opening the reader from home dashboard loads the quran_library Quran display within seconds.
+- [ ] Quran text renders using quran_library with `useMaterial3: false` theme wrapper; no rendering or formation problems visible.
+- [ ] The reader shows Raqeem visual identity: warm parchment background, gold accent on selection, brown primary text.
+- [ ] The surah name and page number appear in the reader top and bottom controls area.
+
+#### Navigation Selectors
+- [ ] Tapping the surah navigation button (list icon) opens the navigation selector bottom sheet.
+- [ ] The navigation selector shows five index tabs: السورة (Surah), الجزء (Juz), الحزب (Hizb), الربع (Rub), الصفحة (Page).
+- [ ] Surah tab shows 114 items with Arabic labels like "سورة 1" through "سورة 114".
+- [ ] Juz tab shows 30 items with labels "الجزء 1" through "الجزء 30".
+- [ ] Hizb tab shows 60 items with labels "الحزب 1" through "الحزب 60".
+- [ ] Rub tab shows 240 items with labels "الربع 1" through "الربع 240".
+- [ ] Page tab shows 604 items with labels "صفحة 1" through "صفحة 604".
+- [ ] The search field in the selector filters items by label substring match.
+- [ ] Tapping an item in the selector jumps the reader to the corresponding position and closes the sheet.
+- [ ] Switching between index types clears the current search filter.
+
+#### Control Toggling
+- [ ] Controls (back, navigate, bookmark, previous/next page) are visible by default.
+- [ ] Tapping the reading area hides all controls, leaving only the Quran text visible.
+- [ ] Tapping the reading area again restores all controls.
+- [ ] Control visibility toggling does not change the current Quran position or page.
+- [ ] Page navigation via the previous/next chevrons changes the displayed page number in the bottom bar.
+
+#### Ayah Selection
+- [ ] Long-pressing an ayah triggers the ayah selection state in the reader.
+- [ ] The selection banner at the bottom shows the surah name and ayah number.
+- [ ] Tapping the selection banner opens the ayah action menu bottom sheet.
+- [ ] The ayah action menu shows action chips: تشغيل الصوت, التفسير, الترجمة, علامة, إضافة ملاحظة, نسخ, مشاركة النص, مشاركة صورة, بداية الورد, نهاية الورد.
+- [ ] Tapping "نسخ" (Copy) copies the ayah text and reference to the system clipboard.
+- [ ] The close button on the selection banner removes the selection and returns to reading.
+
+#### Last Position Tracking
+- [ ] Moving to a new page or ayah updates the tracked last reading position automatically.
+- [ ] Moving the app to the background saves the current position without user interaction.
+- [ ] Returning to the app after backgrounding resumes at the last tracked position.
+
+#### Raqeem Reader Style
+- [ ] Quran text is rendered entirely by quran_library; no Quran text is duplicated or altered by Raqeem.
+- [ ] Selection highlight uses the accent gold color at 20% opacity.
+- [ ] Page decorations (juz, hizb, surah name labels) use secondary text color.
+- [ ] Surah banner uses the Raqeem accent gold SVG color.
+- [ ] Basmala text uses the primary text color.
+- [ ] Download fonts dialog shows Raqeem-styled colors and Arabic header.
+
+#### Error Recovery
+- [ ] When the reader fails to load, an error state with a retry button is shown.
+- [ ] Tapping retry recovers the reader to the last known position without losing context.
+
+### US3: Reflect on and Share Ayahs
+
+#### Tafsir and Translation
+- [ ] Selecting an ayah and tapping "التفسير" opens the tafsir bottom sheet.
+- [ ] The tafsir sheet shows the surah name and ayah number in the header.
+- [ ] Available tafsir sources are listed with display names in Arabic.
+- [ ] When no tafsir is downloaded, the sheet shows an unavailable state message in Arabic.
+- [ ] Selecting an ayah and tapping "الترجمة" opens the translation bottom sheet.
+- [ ] The translation sheet shows the surah name and ayah number in the header.
+- [ ] Available translation sources are listed with display names.
+- [ ] Closing the explanation sheet returns to the reader without losing the ayah selection context.
+
+#### Copy and Share Text
+- [ ] Tapping "نسخ" from the ayah action menu copies the ayah text and reference to the system clipboard.
+- [ ] Tapping "مشاركة النص" from the ayah action menu opens the native Android/iOS share sheet.
+- [ ] The shared text includes the ayah text and the surah:ayah reference.
+- [ ] Share failure does not block or disrupt the reader.
+
+#### Share Image
+- [ ] Tapping "مشاركة صورة" from the ayah action menu navigates to the share preview screen.
+- [ ] The share preview shows a visual preview card with the surah name and ayah reference.
+- [ ] Format selector offers square, story, and portrait image options.
+- [ ] Theme selector offers light, night, and parchment color options.
+- [ ] Translation and tafsir inclusion toggles are present.
+- [ ] Tapping the share button generates the image and opens the native share sheet.
+- [ ] If image generation fails, a clear failure state is shown without crashing.
+
+#### Bookmarks and Notes
+- [ ] Tapping "علامة" from the ayah action menu saves a bookmark annotation quickly.
+- [ ] Tapping "إضافة ملاحظة" saves a note-type bookmark annotation.
+- [ ] The bookmarks screen lists saved bookmarks sorted by most recently updated.
+- [ ] Each bookmark item shows the surah name, ayah number, and an optional note.
+- [ ] The color indicator on each bookmark matches the assigned bookmark color.
+- [ ] Tapping a bookmark item navigates to the reader at the saved Quran position.
+- [ ] Tapping delete on a bookmark removes it from the list immediately.
+- [ ] The empty bookmarks state shows the Arabic message "لا توجد علامات محفوظة".
+- [ ] Error state shows an Arabic error message with a retry button.
+
+#### Native Share Sheet Verification (Android)
+- [ ] Text sharing opens the Android share sheet with the ayah text and reference.
+- [ ] Image sharing opens the Android share sheet with a PNG image file.
+- [ ] The share sheet shows Raqeem as the source application.
+
+#### Native Share Sheet Verification (iOS)
+- [ ] Text sharing opens the iOS share sheet with the ayah text and reference.
+- [ ] Image sharing opens the iOS share sheet with a PNG image file.
+- [ ] The share sheet UI presentation is standard iOS behavior.
+
+#### Generated Image Output
+- [ ] Square image has 1:1 aspect ratio with parchment or selected theme background.
+- [ ] Story image has 9:16 aspect ratio suitable for social media stories.
+- [ ] Portrait image has 3:4 aspect ratio.
+- [ ] All generated images include the surah name and ayah reference.
+- [ ] Brand placement appears in the configured position (footer or minimal).
+- [ ] Image generation completes or reports failure within 30 seconds.
+
 ### General MVP Checks
 
 - First launch opens onboarding, stores Arabic/English language and visual mode, and routes to home.

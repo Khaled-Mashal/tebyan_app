@@ -10,7 +10,9 @@ abstract class QuranGateway
         QuranSelectionGateway,
         QuranExplanationGateway,
         QuranBookmarkGateway,
-        QuranSearchGateway {
+        QuranSearchGateway,
+        QuranAudioGateway,
+        QuranWordGateway {
   Future<void> initialize({
     required String languageCode,
     required bool enableWordAudio,
@@ -42,6 +44,7 @@ abstract interface class QuranNavigationGateway {
   Future<QuranPosition> resolveJuzStart(int juzNumber);
   Future<QuranPosition> resolveHizbStart(int hizbNumber);
   Future<QuranPosition> resolveRubStart(int rubNumber);
+  Future<QuranPosition> resolveAyahPosition(int ayahUQNumber);
   Future<int> comparePositions(QuranPosition a, QuranPosition b);
 
   void jumpToPosition(QuranPosition position);
@@ -60,9 +63,41 @@ abstract interface class QuranSelectionGateway {
   Future<void> copyAyah(QuranPosition position);
 }
 
+abstract interface class QuranAudioGateway {
+  Future<void> playAyahAudio(
+    BuildContext context,
+    QuranPosition position, {
+    bool playSingleAyah = true,
+  });
+}
+
+abstract interface class QuranWordGateway {
+  Future<List<QuranAyahWord>> getAyahWords(QuranPosition position);
+  Future<void> playWordAudio(QuranWordSelection selection);
+  Future<void> playAyahWordsAudio(QuranPosition position);
+  Future<QuranWordInfoResult> getWordInfo(
+    QuranWordSelection selection, {
+    QuranWordInfoKind kind = QuranWordInfoKind.recitations,
+  });
+  Future<AvailabilityState> downloadWordInfoKind(QuranWordInfoKind kind);
+  Future<void> showWordInfo(
+    BuildContext context,
+    QuranWordSelection selection, {
+    QuranWordInfoKind kind = QuranWordInfoKind.recitations,
+  });
+}
+
 abstract interface class QuranExplanationGateway {
   Future<List<TafsirSourceSummary>> listTafsirSources();
   Future<List<TranslationSourceSummary>> listTranslationSources();
+  Future<List<QuranExplanationText>> getTafsir(
+    QuranPosition position, {
+    String? sourceId,
+  });
+  Future<List<QuranExplanationText>> getTranslation(
+    QuranPosition position, {
+    String? sourceId,
+  });
   Future<AvailabilityState> ensureTafsirAvailable(String sourceId);
   Future<AvailabilityState> ensureTranslationAvailable(String sourceId);
   Future<void> showTafsir(BuildContext context, QuranPosition position);
@@ -97,6 +132,56 @@ class SelectedAyah {
   final String reference;
   final String? translation;
   final String? tafsir;
+}
+
+class QuranAyahWord {
+  const QuranAyahWord({required this.selection, required this.text});
+
+  final QuranWordSelection selection;
+  final String text;
+}
+
+class QuranWordSelection {
+  const QuranWordSelection({required this.position, required this.wordNumber});
+
+  final QuranPosition position;
+  final int wordNumber;
+}
+
+enum QuranWordInfoKind { recitations, morphology, grammar }
+
+class QuranWordInfoResult {
+  const QuranWordInfoResult({
+    required this.kind,
+    required this.availability,
+    this.word,
+    this.content,
+    this.hasKhilaf = false,
+  });
+
+  final QuranWordInfoKind kind;
+  final AvailabilityState availability;
+  final String? word;
+  final String? content;
+  final bool hasKhilaf;
+
+  bool get hasContent => content != null && content!.trim().isNotEmpty;
+}
+
+class QuranExplanationText {
+  const QuranExplanationText({
+    required this.sourceId,
+    required this.sourceName,
+    required this.text,
+    this.availability = AvailabilityState.available,
+  });
+
+  final String sourceId;
+  final String sourceName;
+  final String text;
+  final AvailabilityState availability;
+
+  bool get hasContent => text.trim().isNotEmpty;
 }
 
 class TafsirSourceSummary {

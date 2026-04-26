@@ -90,25 +90,25 @@
 
 ### Tests for User Story 2
 
-- [ ] T036 [P] [US2] Add Quran navigation gateway contract tests for page, surah, juz, hizb, rub, invalid input, and compare behavior in `test/features/quran/infrastructure/quran_navigation_gateway_test.dart`
-- [ ] T037 [P] [US2] Add reader view model tests for loading, ready, control visibility, ayah selection, and save-last-position commands in `test/features/quran/application/reader_view_model_test.dart`
-- [ ] T038 [P] [US2] Add navigation selector view model tests for supported index types and quick search filtering in `test/features/quran/application/navigation_selector_view_model_test.dart`
-- [ ] T039 [P] [US2] Add reader widget tests for controls, selection, and error states in `test/features/quran/presentation/quran_reader_screen_test.dart`
-- [ ] T040 [P] [US2] Add accessibility tests for reader controls, tap targets, labels, and no clipped primary controls in `test/shared/accessibility/reader_accessibility_test.dart`
+- [X] T036 [P] [US2] Add Quran navigation gateway contract tests for page, surah, juz, hizb, rub, invalid input, and compare behavior in `test/features/quran/infrastructure/quran_navigation_gateway_test.dart`
+- [X] T037 [P] [US2] Add reader view model tests for loading, ready, control visibility, ayah selection, and save-last-position commands in `test/features/quran/application/reader_view_model_test.dart`
+- [X] T038 [P] [US2] Add navigation selector view model tests for supported index types and quick search filtering in `test/features/quran/application/navigation_selector_view_model_test.dart`
+- [X] T039 [P] [US2] Add reader widget tests for controls, selection, and error states in `test/features/quran/presentation/quran_reader_screen_test.dart`
+- [X] T040 [P] [US2] Add accessibility tests for reader controls, tap targets, labels, and no clipped primary controls in `test/shared/accessibility/reader_accessibility_test.dart`
 
 ### Implementation for User Story 2
 
-- [ ] T041 [US2] Implement navigation and metadata methods in `lib/features/quran/infrastructure/quran_library_gateway.dart`
-- [ ] T042 [US2] Implement quran_library reader widget factory for `QuranLibraryScreen` and `QuranPagesScreen` in `lib/features/quran/infrastructure/quran_reader_widget_factory.dart`
-- [ ] T043 [US2] Define reader state, ayah selection, and control visibility models in `lib/features/quran/application/reader_state.dart`
-- [ ] T044 [US2] Implement reader view model for open, navigate, toggle controls, select ayah, and save position in `lib/features/quran/application/reader_view_model.dart`
-- [ ] T045 [US2] Implement navigation selector view model for surah, juz, hizb, rub, and page selection in `lib/features/quran/application/navigation_selector_view_model.dart`
-- [ ] T046 [US2] Build distraction-free Quran reader screen that composes quran_library widgets in `lib/features/quran/presentation/quran_reader_screen.dart`
-- [ ] T047 [US2] Build surah, juz, hizb, rub, and page navigation selector UI in `lib/features/quran/presentation/navigation_selector_sheet.dart`
-- [ ] T048 [US2] Build base ayah action menu shell with audio, tafsir, translation, bookmark, note, copy, share, and wird boundary actions in `lib/features/quran/presentation/ayah_action_menu.dart`
-- [ ] T049 [US2] Add Raqeem reader style mapping without altering Quran text in `lib/features/quran/presentation/raqeem_reader_style.dart`
-- [ ] T050 [US2] Integrate last-position tracking from page and ayah changes in `lib/features/quran/application/reader_position_service.dart`
-- [ ] T051 [US2] Document US2 manual verification for all navigation selectors and control toggling in `specs/001-raqeem-quran-app/quickstart.md`
+- [X] T041 [US2] Implement navigation and metadata methods in `lib/features/quran/infrastructure/quran_library_gateway.dart`
+- [X] T042 [US2] Implement quran_library reader widget factory for `QuranLibraryScreen` and `QuranPagesScreen` in `lib/features/quran/infrastructure/quran_reader_widget_factory.dart`
+- [X] T043 [US2] Define reader state, ayah selection, and control visibility models in `lib/features/quran/application/reader_state.dart`
+- [X] T044 [US2] Implement reader view model for open, navigate, toggle controls, select ayah, and save position in `lib/features/quran/application/reader_view_model.dart`
+- [X] T045 [US2] Implement navigation selector view model for surah, juz, hizb, rub, and page selection in `lib/features/quran/application/navigation_selector_view_model.dart`
+- [X] T046 [US2] Build distraction-free Quran reader screen that composes quran_library widgets in `lib/features/quran/presentation/quran_reader_screen.dart`
+- [X] T047 [US2] Build surah, juz, hizb, rub, and page navigation selector UI in `lib/features/quran/presentation/navigation_selector_sheet.dart`
+- [X] T048 [US2] Build base ayah action menu shell with audio, tafsir, translation, bookmark, note, copy, share, and wird boundary actions in `lib/features/quran/presentation/ayah_action_menu.dart`
+- [X] T049 [US2] Add Raqeem reader style mapping without altering Quran text in `lib/features/quran/presentation/raqeem_reader_style.dart`
+- [X] T050 [US2] Integrate last-position tracking from page and ayah changes in `lib/features/quran/application/reader_position_service.dart`
+- [X] T051 [US2] Document US2 manual verification for all navigation selectors and control toggling in `specs/001-raqeem-quran-app/quickstart.md`
 
 **Checkpoint**: User Story 2 is independently usable after the foundation and can be demoed as the core Quran reader.
 
@@ -122,25 +122,25 @@
 
 ### Tests for User Story 3
 
-- [ ] T052 [P] [US3] Add tafsir and translation gateway tests for source listing, availability, display, and unavailable states in `test/features/quran/infrastructure/quran_explanation_gateway_test.dart`
-- [ ] T053 [P] [US3] Add bookmark annotation repository tests for create, edit, archive/delete, sort, anchor mapping, and search fields in `test/features/bookmarks/infrastructure/bookmark_repository_test.dart`
-- [ ] T054 [P] [US3] Add sharing application tests for text reference generation, image draft options, generation failure, and share gateway calls in `test/features/sharing/application/ayah_sharing_service_test.dart`
-- [ ] T055 [P] [US3] Add ayah action menu widget tests for tafsir, translation, copy, share, bookmark, and note commands in `test/features/quran/presentation/ayah_action_menu_test.dart`
-- [ ] T056 [P] [US3] Add bookmarks screen widget tests for list, empty, edit, delete, and open-location actions in `test/features/bookmarks/presentation/bookmarks_screen_test.dart`
+- [X] T052 [P] [US3] Add tafsir and translation gateway tests for source listing, availability, display, and unavailable states in `test/features/quran/infrastructure/quran_explanation_gateway_test.dart`
+- [X] T053 [P] [US3] Add bookmark annotation repository tests for create, edit, archive/delete, sort, anchor mapping, and search fields in `test/features/bookmarks/infrastructure/bookmark_repository_test.dart`
+- [X] T054 [P] [US3] Add sharing application tests for text reference generation, image draft options, generation failure, and share gateway calls in `test/features/sharing/application/ayah_sharing_service_test.dart`
+- [X] T055 [P] [US3] Add ayah action menu widget tests for tafsir, translation, copy, share, bookmark, and note commands in `test/features/quran/presentation/ayah_action_menu_test.dart`
+- [X] T056 [P] [US3] Add bookmarks screen widget tests for list, empty, edit, delete, and open-location actions in `test/features/bookmarks/presentation/bookmarks_screen_test.dart`
 
 ### Implementation for User Story 3
 
-- [ ] T057 [US3] Implement tafsir, translation, selection, copy, and share text methods in `lib/features/quran/infrastructure/quran_library_gateway.dart`
-- [ ] T058 [US3] Implement `BookmarkAnnotation` entity and validation in `lib/features/bookmarks/domain/bookmark_annotation.dart`
-- [ ] T059 [US3] Implement SQLite bookmark annotation repository and quran_library anchor coordination in `lib/features/bookmarks/infrastructure/bookmark_repository.dart`
-- [ ] T060 [US3] Implement bookmark list and editor view models in `lib/features/bookmarks/application/bookmarks_view_model.dart` and `lib/features/bookmarks/application/bookmark_editor_view_model.dart`
-- [ ] T061 [US3] Build bookmark list, filter/sort, edit, delete, and open-location UI in `lib/features/bookmarks/presentation/bookmarks_screen.dart`
-- [ ] T062 [US3] Implement `AyahShareDraft` entity and SQLite draft repository in `lib/features/sharing/domain/ayah_share_draft.dart` and `lib/features/sharing/infrastructure/ayah_share_draft_repository.dart`
-- [ ] T063 [US3] Implement ayah sharing service for copy, text share, preview options, image generation, and failure handling in `lib/features/sharing/application/ayah_sharing_service.dart`
-- [ ] T064 [US3] Build share image preview and format selection UI in `lib/features/sharing/presentation/share_preview_screen.dart`
-- [ ] T065 [US3] Build tafsir and translation launch surfaces preserving ayah context in `lib/features/quran/presentation/explanation_sheet.dart`
-- [ ] T066 [US3] Connect ayah action menu commands to tafsir, translation, bookmarks, notes, copy, text share, and image share in `lib/features/quran/presentation/ayah_action_menu.dart`
-- [ ] T067 [US3] Document US3 manual verification for native share sheets and generated image output in `specs/001-raqeem-quran-app/quickstart.md`
+- [X] T057 [US3] Implement tafsir, translation, selection, copy, and share text methods in `lib/features/quran/infrastructure/quran_library_gateway.dart`
+- [X] T058 [US3] Implement `BookmarkAnnotation` entity and validation in `lib/features/bookmarks/domain/bookmark_annotation.dart`
+- [X] T059 [US3] Implement SQLite bookmark annotation repository and quran_library anchor coordination in `lib/features/bookmarks/infrastructure/bookmark_repository.dart`
+- [X] T060 [US3] Implement bookmark list and editor view models in `lib/features/bookmarks/application/bookmarks_view_model.dart` and `lib/features/bookmarks/application/bookmark_editor_view_model.dart`
+- [X] T061 [US3] Build bookmark list, filter/sort, edit, delete, and open-location UI in `lib/features/bookmarks/presentation/bookmarks_screen.dart`
+- [X] T062 [US3] Implement `AyahShareDraft` entity and SQLite draft repository in `lib/features/sharing/domain/ayah_share_draft.dart` and `lib/features/sharing/infrastructure/ayah_share_draft_repository.dart`
+- [X] T063 [US3] Implement ayah sharing service for copy, text share, preview options, image generation, and failure handling in `lib/features/sharing/application/ayah_sharing_service.dart`
+- [X] T064 [US3] Build share image preview and format selection UI in `lib/features/sharing/presentation/share_preview_screen.dart`
+- [X] T065 [US3] Build tafsir and translation launch surfaces preserving ayah context in `lib/features/quran/presentation/explanation_sheet.dart`
+- [X] T066 [US3] Connect ayah action menu commands to tafsir, translation, bookmarks, notes, copy, text share, and image share in `lib/features/quran/presentation/ayah_action_menu.dart`
+- [X] T067 [US3] Document US3 manual verification for native share sheets and generated image output in `specs/001-raqeem-quran-app/quickstart.md`
 
 **Checkpoint**: User Story 3 is independently complete and does not depend on audio or khatma implementation.
 

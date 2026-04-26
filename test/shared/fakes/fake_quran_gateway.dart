@@ -12,6 +12,11 @@ class FakeQuranGateway extends QuranGateway {
   final List<QuranPosition> _positions;
   final List<QuranSearchMatch> _searchMatches;
   final List<QuranPosition> jumps = <QuranPosition>[];
+  final List<QuranPosition> playedAyahs = <QuranPosition>[];
+  final List<QuranWordSelection> playedWords = <QuranWordSelection>[];
+  final List<QuranPosition> playedAyahWords = <QuranPosition>[];
+  final List<QuranWordSelection> openedWordInfo = <QuranWordSelection>[];
+  final List<QuranWordInfoKind> downloadedWordInfoKinds = <QuranWordInfoKind>[];
   bool _isInitialized = false;
 
   static final _defaultPositions = <QuranPosition>[
@@ -68,6 +73,13 @@ class FakeQuranGateway extends QuranGateway {
   }
 
   @override
+  Future<QuranPosition> resolveAyahPosition(int ayahUQNumber) async {
+    return _positions.firstWhere(
+      (position) => position.ayahUniqueNumber == ayahUQNumber,
+    );
+  }
+
+  @override
   Future<int> comparePositions(QuranPosition a, QuranPosition b) async {
     return a.page == b.page
         ? a.ayahNumber.compareTo(b.ayahNumber)
@@ -115,6 +127,69 @@ class FakeQuranGateway extends QuranGateway {
   }
 
   @override
+  Future<void> playAyahAudio(
+    BuildContext context,
+    QuranPosition position, {
+    bool playSingleAyah = true,
+  }) async {
+    playedAyahs.add(position);
+  }
+
+  @override
+  Future<List<QuranAyahWord>> getAyahWords(QuranPosition position) async {
+    const words = <String>['نص', 'آية', 'اختباري'];
+    return <QuranAyahWord>[
+      for (var i = 0; i < words.length; i++)
+        QuranAyahWord(
+          selection: QuranWordSelection(position: position, wordNumber: i + 1),
+          text: words[i],
+        ),
+    ];
+  }
+
+  @override
+  Future<void> playWordAudio(QuranWordSelection selection) async {
+    playedWords.add(selection);
+  }
+
+  @override
+  Future<void> playAyahWordsAudio(QuranPosition position) async {
+    playedAyahWords.add(position);
+  }
+
+  @override
+  Future<QuranWordInfoResult> getWordInfo(
+    QuranWordSelection selection, {
+    QuranWordInfoKind kind = QuranWordInfoKind.recitations,
+  }) async {
+    return QuranWordInfoResult(
+      kind: kind,
+      availability: AvailabilityState.available,
+      word: 'اختبار',
+      content: switch (kind) {
+        QuranWordInfoKind.recitations => 'بيانات القراءات',
+        QuranWordInfoKind.morphology => 'بيانات التصريف',
+        QuranWordInfoKind.grammar => 'بيانات الإعراب',
+      },
+    );
+  }
+
+  @override
+  Future<AvailabilityState> downloadWordInfoKind(QuranWordInfoKind kind) async {
+    downloadedWordInfoKinds.add(kind);
+    return AvailabilityState.available;
+  }
+
+  @override
+  Future<void> showWordInfo(
+    BuildContext context,
+    QuranWordSelection selection, {
+    QuranWordInfoKind kind = QuranWordInfoKind.recitations,
+  }) async {
+    openedWordInfo.add(selection);
+  }
+
+  @override
   Future<String> buildShareText(
     QuranPosition position, {
     String? translationId,
@@ -133,6 +208,34 @@ class FakeQuranGateway extends QuranGateway {
   @override
   Future<List<TranslationSourceSummary>> listTranslationSources() async {
     return const <TranslationSourceSummary>[];
+  }
+
+  @override
+  Future<List<QuranExplanationText>> getTafsir(
+    QuranPosition position, {
+    String? sourceId,
+  }) async {
+    return <QuranExplanationText>[
+      QuranExplanationText(
+        sourceId: sourceId ?? 'fake-tafsir',
+        sourceName: 'تفسير اختباري',
+        text: 'نص تفسير اختباري',
+      ),
+    ];
+  }
+
+  @override
+  Future<List<QuranExplanationText>> getTranslation(
+    QuranPosition position, {
+    String? sourceId,
+  }) async {
+    return <QuranExplanationText>[
+      QuranExplanationText(
+        sourceId: sourceId ?? 'fake-translation',
+        sourceName: 'ترجمة اختبارية',
+        text: 'نص ترجمة اختباري',
+      ),
+    ];
   }
 
   @override

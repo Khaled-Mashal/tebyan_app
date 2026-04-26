@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../features/bookmarks/application/bookmarks_view_model.dart';
+import '../../features/bookmarks/infrastructure/bookmark_repository.dart';
+import '../../features/bookmarks/presentation/bookmarks_screen.dart';
 import '../../features/home/application/home_view_model.dart';
 import '../../features/home/infrastructure/last_reading_repository.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/khatma/application/active_khatma_summary.dart';
 import '../../features/onboarding/application/onboarding_view_model.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/quran/application/reader_position_service.dart';
+import '../../features/quran/application/reader_view_model.dart';
 import '../../features/quran/domain/quran_position.dart';
+import '../../features/quran/infrastructure/quran_gateway.dart';
+import '../../features/quran/infrastructure/quran_reader_widget_factory.dart';
+import '../../features/quran/presentation/quran_reader_screen.dart';
 import '../../features/settings/infrastructure/preferences_repository.dart';
 import '../localization/app_localizations.dart';
 import '../theme/raqeem_theme.dart';
@@ -52,11 +60,66 @@ class AppRouter {
           );
         });
       },
-      reader: (_) => Theme(
-        data: RaqeemTheme.quranReaderTheme(Brightness.light),
-        child: const RaqeemRouteShell(route: RaqeemRoute.reader),
-      ),
-      bookmarks: (_) => const RaqeemRouteShell(route: RaqeemRoute.bookmarks),
+      reader: (_) {
+        return Builder(
+          builder: (context) {
+            final gateway = context.read<QuranGateway>();
+            final lastReadingRepo = context.read<LastReadingRepository>();
+            final positionService = ReaderPositionService(
+              repository: lastReadingRepo,
+            )..attach();
+
+            final args = ModalRoute.of(context)?.settings.arguments;
+            QuranPosition? initialPosition;
+            if (args is QuranPosition) {
+              initialPosition = args;
+            }
+
+            final viewModel = ReaderViewModel(
+              navigationGateway: gateway,
+              positionService: positionService,
+            );
+
+            if (initialPosition != null) {
+              viewModel.openAtPosition(initialPosition);
+            } else {
+              viewModel.openAtPage(1);
+            }
+
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider<ReaderViewModel>.value(value: viewModel),
+                ChangeNotifierProvider<ReaderPositionService>.value(
+                  value: positionService,
+                ),
+                Provider<QuranReaderWidgetFactory>.value(
+                  value: QuranLibraryReaderWidgetFactory(),
+                ),
+              ],
+              child: Theme(
+                data: RaqeemTheme.quranReaderTheme(Brightness.light),
+                child: const QuranReaderScreen(),
+              ),
+            );
+          },
+        );
+      },
+      bookmarks: (_) {
+        return Builder(
+          builder: (context) {
+            final bookmarkRepo = context.read<BookmarkRepository>();
+            return ChangeNotifierProvider<BookmarksViewModel>(
+              create: (_) =>
+                  BookmarksViewModel(repository: bookmarkRepo)..loadBookmarks(),
+              child: BookmarksScreen(
+                onOpenLocation: (bookmark) {
+                  navigateToReader(context, bookmark.position);
+                },
+              ),
+            );
+          },
+        );
+      },
       audio: (_) => const RaqeemRouteShell(route: RaqeemRoute.audio),
       khatma: (_) => const RaqeemRouteShell(route: RaqeemRoute.khatma),
       search: (_) => const RaqeemRouteShell(route: RaqeemRoute.search),
