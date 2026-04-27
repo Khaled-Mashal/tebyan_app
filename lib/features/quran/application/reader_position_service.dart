@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../../../shared/errors/result.dart';
@@ -12,6 +14,9 @@ class ReaderPositionService extends ChangeNotifier with WidgetsBindingObserver {
   final LastReadingRepository _repository;
   QuranPosition? _currentPosition;
   bool _isDisposed = false;
+  Timer? _debounceTimer;
+
+  static const _debounceDuration = Duration(seconds: 1);
 
   QuranPosition? get currentPosition => _currentPosition;
 
@@ -22,6 +27,12 @@ class ReaderPositionService extends ChangeNotifier with WidgetsBindingObserver {
   void updatePosition(QuranPosition position) {
     if (_isDisposed) return;
     _currentPosition = position;
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(_debounceDuration, () {
+      if (!_isDisposed && _currentPosition != null) {
+        saveCurrentPosition();
+      }
+    });
   }
 
   Future<Result<void>> saveCurrentPosition() async {
@@ -50,14 +61,31 @@ class ReaderPositionService extends ChangeNotifier with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
+      _debounceTimer?.cancel();
       saveCurrentPosition();
     }
   }
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _isDisposed = true;
+    _flushPositionToRepository();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void _flushPositionToRepository() {
+    final position = _currentPosition;
+    if (position == null) return;
+    final entry = LastReadingEntry(
+      id: '${position.page}-${DateTime.now().microsecondsSinceEpoch}',
+      position: position,
+      source: LastReadingSource.reader,
+      savedAt: DateTime.now().toUtc(),
+      displayTitle: position.displaySurahName,
+      displaySubtitle: position.displayAyahLabel,
+    );
+    _repository.saveEntry(entry);
   }
 }

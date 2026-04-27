@@ -37,39 +37,42 @@ class QuranLibraryReaderWidgetFactory implements QuranReaderWidgetFactory {
     required void Function(int ayahUQNumber) onAyahSelected,
     VoidCallback? onPageTap,
   }) {
-    return QuranLibraryScreen(
-      parentContext: context,
-      isDark: style.isDark,
-      backgroundColor: style.backgroundColor,
-      textColor: style.textColor,
-      ayahSelectedBackgroundColor: style.accentColor.withValues(alpha: 0.2),
-      ayahSelectedFontColor: style.textColor,
-      appLanguageCode: languageCode,
-      pageIndex: initialPageIndex,
-      useDefaultAppBar: false,
-      withPageView: true,
-      showAyahBookmarkedIcon: false,
-      isShowAudioSlider: false,
-      isShowTabBar: false,
-      isShowDisplayModeBar: false,
-      enableWordSelection: false,
-      wordInfoBottomSheetStyle: style.wordInfoBottomSheetStyle,
-      topBarStyle: style.topBarStyle,
-      topBottomQuranStyle: style.topBottomStyle,
-      bannerStyle: style.bannerStyle,
-      basmalaStyle: style.basmalaStyle,
-      surahNameStyle: style.surahNameStyle,
-      surahInfoStyle: style.surahInfoStyle,
-      ayahMenuStyle: style.ayahMenuStyle,
-      snackBarStyle: style.snackBarStyle,
-      downloadFontsDialogStyle: style.downloadFontsDialogStyle,
-      onPageChanged: (int pageNumber) {
-        onPageChanged(pageNumber);
-      },
-      onPagePress: onPageTap,
-      onAyahLongPress: (details, ayah) {
-        onAyahSelected(ayah.ayahUQNumber);
-      },
+    return _PageJumpScope(
+      initialPageIndex: initialPageIndex,
+      child: QuranLibraryScreen(
+        parentContext: context,
+        isDark: style.isDark,
+        backgroundColor: style.backgroundColor,
+        textColor: style.textColor,
+        ayahSelectedBackgroundColor: style.accentColor.withValues(alpha: 0.2),
+        ayahSelectedFontColor: style.textColor,
+        appLanguageCode: languageCode,
+        pageIndex: initialPageIndex,
+        useDefaultAppBar: false,
+        withPageView: true,
+        showAyahBookmarkedIcon: false,
+        isShowAudioSlider: false,
+        isShowTabBar: false,
+        isShowDisplayModeBar: false,
+        enableWordSelection: false,
+        wordInfoBottomSheetStyle: style.wordInfoBottomSheetStyle,
+        topBarStyle: style.topBarStyle,
+        topBottomQuranStyle: style.topBottomStyle,
+        bannerStyle: style.bannerStyle,
+        basmalaStyle: style.basmalaStyle,
+        surahNameStyle: style.surahNameStyle,
+        surahInfoStyle: style.surahInfoStyle,
+        ayahMenuStyle: style.ayahMenuStyle,
+        snackBarStyle: style.snackBarStyle,
+        downloadFontsDialogStyle: style.downloadFontsDialogStyle,
+        onPageChanged: (int pageNumber) {
+          onPageChanged(pageNumber);
+        },
+        onPagePress: onPageTap,
+        onAyahLongPress: (details, ayah) {
+          onAyahSelected(ayah.ayahUQNumber);
+        },
+      ),
     );
   }
 
@@ -105,4 +108,31 @@ class QuranLibraryReaderWidgetFactory implements QuranReaderWidgetFactory {
       snackBarStyle: style.snackBarStyle,
     );
   }
+}
+
+class _PageJumpScope extends StatefulWidget {
+  const _PageJumpScope({required this.initialPageIndex, required this.child});
+
+  final int initialPageIndex;
+  final Widget child;
+
+  @override
+  State<_PageJumpScope> createState() => _PageJumpScopeState();
+}
+
+class _PageJumpScopeState extends State<_PageJumpScope> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final controller = QuranCtrl.instance.quranPagesController;
+      if (controller.hasClients) {
+        controller.jumpToPage(widget.initialPageIndex);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

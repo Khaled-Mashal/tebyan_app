@@ -120,6 +120,23 @@ class ReaderViewModel extends ChangeNotifier {
     _setState(_state.copyWith(clearSelection: true));
   }
 
+  Future<void> jumpToPage(int page) async {
+    try {
+      final position = await _navigationGateway.resolvePageStart(page);
+      _navigationGateway.jumpToPosition(position);
+      _positionService?.updatePosition(position);
+      _setState(
+        _state.copyWith(
+          status: ReaderStatus.ready,
+          position: position,
+          clearError: true,
+        ),
+      );
+    } catch (e, st) {
+      _handleError(e, st);
+    }
+  }
+
   Future<Result<void>> saveLastPosition() async {
     final position = _state.position;
     if (position == null) return const Success<void>(null);

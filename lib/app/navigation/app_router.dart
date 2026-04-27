@@ -5,18 +5,21 @@ import '../../features/bookmarks/application/bookmarks_view_model.dart';
 import '../../features/bookmarks/infrastructure/bookmark_repository.dart';
 import '../../features/bookmarks/presentation/bookmarks_screen.dart';
 import '../../features/home/application/home_view_model.dart';
+import '../../features/home/domain/last_reading_entry.dart';
 import '../../features/home/infrastructure/last_reading_repository.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/khatma/application/active_khatma_summary.dart';
 import '../../features/onboarding/application/onboarding_view_model.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/quran/application/reader_position_service.dart';
+import '../../features/quran/application/reader_state.dart';
 import '../../features/quran/application/reader_view_model.dart';
 import '../../features/quran/domain/quran_position.dart';
 import '../../features/quran/infrastructure/quran_gateway.dart';
 import '../../features/quran/infrastructure/quran_reader_widget_factory.dart';
 import '../../features/quran/presentation/quran_reader_screen.dart';
 import '../../features/settings/infrastructure/preferences_repository.dart';
+import '../../shared/errors/result.dart';
 import '../localization/app_localizations.dart';
 import '../theme/raqeem_theme.dart';
 
@@ -83,7 +86,20 @@ class AppRouter {
             if (initialPosition != null) {
               viewModel.openAtPosition(initialPosition);
             } else {
-              viewModel.openAtPage(1);
+              lastReadingRepo.latestEntry().then((result) {
+                if (viewModel.state.status == ReaderStatus.loading) {
+                  switch (result) {
+                    case Success<LastReadingEntry?>(:final value):
+                      if (value != null) {
+                        viewModel.openAtPosition(value.position);
+                      } else {
+                        viewModel.openAtPage(1);
+                      }
+                    case Failure():
+                      viewModel.openAtPage(1);
+                  }
+                }
+              });
             }
 
             return MultiProvider(

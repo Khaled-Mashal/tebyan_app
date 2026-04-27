@@ -103,21 +103,28 @@ class _ReadyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: viewModel.toggleControls,
-      child: Stack(
-        children: [
-          _QuranReaderBody(
-            viewModel: viewModel,
-            l10n: l10n,
-            onAyahSelected: (position) => _showAyahActions(context, position),
-          ),
-          if (state.areControlsVisible) ...[
-            _TopControlsBar(viewModel: viewModel, l10n: l10n),
-            _BottomControlsBar(viewModel: viewModel, l10n: l10n),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        await viewModel.saveLastPosition();
+        if (context.mounted) Navigator.of(context).pop();
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: viewModel.toggleControls,
+        child: Stack(
+          children: [
+            _QuranReaderBody(
+              viewModel: viewModel,
+              l10n: l10n,
+              onAyahSelected: (position) => _showAyahActions(context, position),
+            ),
+            if (state.areControlsVisible) ...[
+              _TopControlsBar(viewModel: viewModel, l10n: l10n),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -281,10 +288,12 @@ class _QuranReaderBody extends StatelessWidget {
     return _ReaderPlaceholder(position: position, l10n: l10n);
   }
 
-  void _handlePageChange(BuildContext context, int pageNumber) {
+  void _handlePageChange(BuildContext context, int pageIndex) {
     final gateway = _tryRead<QuranNavigationGateway>(context);
     if (gateway == null) return;
     final service = _tryRead<ReaderPositionService>(context);
+    // pageIndex is 0-based from PageView; resolvePageStart expects 1-based page
+    final pageNumber = pageIndex + 1;
     gateway.resolvePageStart(pageNumber).then((pos) {
       viewModel.openAtPosition(pos);
       service?.updatePosition(pos);
@@ -404,78 +413,9 @@ class _TopControlsBar extends StatelessWidget {
           case NavigationIndexType.rub:
             await viewModel.navigateByRub(item.number);
           case NavigationIndexType.page:
-            await viewModel.openAtPage(item.number);
+            await viewModel.jumpToPage(item.number);
         }
       },
-    );
-  }
-}
-
-class _BottomControlsBar extends StatelessWidget {
-  const _BottomControlsBar({required this.viewModel, required this.l10n});
-
-  final ReaderViewModel viewModel;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              RaqeemColors.background,
-              RaqeemColors.background.withValues(alpha: 0),
-            ],
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _ControlButton(
-              buttonKey: const Key('reader_previous_page'),
-              icon: Icons.chevron_right_rounded,
-              tooltip: l10n.previousPage,
-              onTap: () {
-                final current = viewModel.state.position;
-                if (current != null && current.page > 1) {
-                  viewModel.openAtPage(current.page - 1);
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                viewModel.state.position != null
-                    ? '${l10n.pageLabel} ${viewModel.state.position!.page}'
-                    : '',
-                style: const TextStyle(
-                  color: RaqeemColors.secondaryText,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            _ControlButton(
-              buttonKey: const Key('reader_next_page'),
-              icon: Icons.chevron_left_rounded,
-              tooltip: l10n.nextPage,
-              onTap: () {
-                final current = viewModel.state.position;
-                if (current != null && current.page < 604) {
-                  viewModel.openAtPage(current.page + 1);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -110,7 +110,10 @@ class HomeScreen extends StatelessWidget {
 
   void _navigateToReader(BuildContext context, QuranPosition? position) {
     if (position == null) return;
-    Navigator.of(context).pushNamed(AppRouter.reader, arguments: position);
+    final viewModel = context.read<HomeViewModel>();
+    Navigator.of(context)
+        .pushNamed(AppRouter.reader, arguments: position)
+        .then((_) => viewModel.load());
   }
 
   void _navigateToShortcut(BuildContext context, HomeShortcut shortcut) {
@@ -121,7 +124,8 @@ class HomeScreen extends StatelessWidget {
       HomeShortcut.khatma => AppRouter.khatma,
       HomeShortcut.settings => AppRouter.settings,
     };
-    Navigator.of(context).pushNamed(destination);
+    final viewModel = context.read<HomeViewModel>();
+    Navigator.of(context).pushNamed(destination).then((_) => viewModel.load());
   }
 }
 
